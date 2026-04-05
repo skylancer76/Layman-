@@ -5,9 +5,11 @@ Layman is a simplified news reader that covers business, tech, and startups. The
 > [!NOTE]
 > This project has been developed as part of the assignment for the recruitment process at **BrewApps**.
 
----
+<p align="center">
+  <video src="./Assets.xcassets/Github.Video.mov" width="300" controls></video>
+</p>
 
-## 📱 Features
+## Features
 
 - **Personalized News Feed**: Stay up to date with the latest business and technology articles from top sources.
 - **AI-Powered Simplification**: Leverages the power of LLMs (Llama-3 via Groq) to convert dense, jargon-heavy news articles into easy-to-digest, 6-sentence summaries.
@@ -16,7 +18,7 @@ Layman is a simplified news reader that covers business, tech, and startups. The
 - **Authentication**: Fully functional, secure email/password authentication flow.
 - **Modern UI/UX**: Designed using native SwiftUI elements mixed with modern Apple design principles, including frosted glass effects, clean typography, and intuitive swipe gestures.
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Frontend**: SwiftUI (iOS 16+)
 - **Architecture**: MVVM (Model-View-ViewModel) to ensure a clean separation of concerns and maintainability.
@@ -24,7 +26,7 @@ Layman is a simplified news reader that covers business, tech, and startups. The
 - **AI Processing**: Groq API using the `llama-3.1-8b-instant` model for lightning-fast article summarization and contextual chat.
 - **News Aggregation**: NewsData.io API for fetching live, real-world tech and business news.
 
-## 🏗 Architecture & Code Structure
+## Architecture & Code Structure
 
 The project strictly follows the **MVVM (Model-View-ViewModel)** architectural pattern. 
 
@@ -33,7 +35,7 @@ The project strictly follows the **MVVM (Model-View-ViewModel)** architectural p
 - **Views**: Declarative SwiftUI views separated into domain-specific folders (`Auth`, `Home`, `ArticleDetail`, `Chat`, `Profile`, `Saved`).
 - **Services**: Singleton network managers (`GroqService`, `NewsService`, `SupabaseService`) encapsulating all external API interactions to keep ViewModels lightweight and testable.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Xcode 15.0+
@@ -61,6 +63,5 @@ The project strictly follows the **MVVM (Model-View-ViewModel)** architectural p
 4. **Build and Run**
    Select your preferred iPhone simulator or plugged-in device in Xcode and hit `Cmd + R` to build and run the application.
 
----
-
-*Designed and developed for iOS.*
+[!IMPORTANT]
+The current AI functionality in the app is powered by Groq (Llama-3.1-8B-Instant) using the free-tier capabilities. Paid or higher-tier features are not currently enabled, which may occasionally impact the quality, depth, or professional tone of some article summaries and responses.
