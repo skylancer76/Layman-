@@ -266,15 +266,26 @@ struct ArticleDetailView: View {
     }
     
     func toggleSave() async {
+        let previousState = isSaved
+        
+        // Optimistic UI update
+        // We do this immediately so the bookmark icon turns filled instantly
+        withAnimation {
+            isSaved.toggle()
+        }
+        
         do {
-            if isSaved {
+            if previousState {
                 try await SupabaseService.shared.unsaveArticle(articleId: article.id)
             } else {
                 try await SupabaseService.shared.saveArticle(article)
             }
-            isSaved.toggle()
         } catch {
             print("Save error: \(error)")
+            // Revert if network call or constraints fail
+            withAnimation {
+                isSaved = previousState
+            }
         }
     }
     

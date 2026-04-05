@@ -11,23 +11,33 @@ import Supabase
 class SupabaseService {
     static let shared = SupabaseService()
     
+    struct InsertSavedArticle: Encodable {
+        let user_id: String
+        let article_id: String
+        let title: String
+        let image_url: String?
+        let source_url: String?
+    }
+    
     func saveArticle(_ article: Article) async throws {
-        let userId = try await supabase.auth.session.user.id.uuidString
+        let userId = try await supabase.auth.session.user.id.uuidString.lowercased()
+        
+        let insertData = InsertSavedArticle(
+            user_id: userId,
+            article_id: article.id,
+            title: article.title,
+            image_url: article.imageURL,
+            source_url: article.sourceURL
+        )
         
         try await supabase
             .from("saved_articles")
-            .insert([
-                "user_id": userId,
-                "article_id": article.id,
-                "title": article.title,
-                "image_url": article.imageURL ?? "",
-                "source_url": article.sourceURL ?? ""
-            ])
+            .insert(insertData)
             .execute()
     }
     
     func unsaveArticle(articleId: String) async throws {
-        let userId = try await supabase.auth.session.user.id.uuidString
+        let userId = try await supabase.auth.session.user.id.uuidString.lowercased()
         
         try await supabase
             .from("saved_articles")
@@ -38,7 +48,7 @@ class SupabaseService {
     }
     
     func fetchSavedArticles() async throws -> [SavedArticle] {
-        let userId = try await supabase.auth.session.user.id.uuidString
+        let userId = try await supabase.auth.session.user.id.uuidString.lowercased()
         
         let response: [SavedArticle] = try await supabase
             .from("saved_articles")
@@ -52,7 +62,7 @@ class SupabaseService {
     }
     
     func isArticleSaved(articleId: String) async throws -> Bool {
-        let userId = try await supabase.auth.session.user.id.uuidString
+        let userId = try await supabase.auth.session.user.id.uuidString.lowercased()
         
         let response: [SavedArticle] = try await supabase
             .from("saved_articles")

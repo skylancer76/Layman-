@@ -86,6 +86,7 @@ struct SavedView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text("Saved")
                         .font(.system(size: 24, weight: .bold))
+                        .fixedSize()
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -96,8 +97,10 @@ struct SavedView: View {
                     }
                 }
             }
-            .task {
-                await savedViewModel.fetchSavedArticles()
+            .onAppear {
+                Task {
+                    await savedViewModel.fetchSavedArticles()
+                }
             }
         }
     }

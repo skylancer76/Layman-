@@ -26,7 +26,7 @@ class GroqService {
             "messages": [
                 [
                     "role": "system",
-                    "content": "You are Layman, a friendly news assistant. Answer in 1-2 sentences max, in very simple everyday language. Here is the article context: \(articleContext)"
+                    "content": "You are Layman, a friendly news assistant. Answer in 1-2 sentences max, in very simple everyday language. RETURN EXACTLY AND ONLY THE ANSWER. DO NOT include any conversational filler, intros, or pleasantries. Here is the article context: \(articleContext)"
                 ],
                 [
                     "role": "user",
@@ -95,7 +95,7 @@ class GroqService {
             "messages": [
                 [
                     "role": "system",
-                    "content": "You are Layman, a news simplifier. Summarize the following article in exactly 6 simple, easy-to-understand sentences. Use casual everyday language that anyone can understand. No jargon. No bullet points. Just 6 plain sentences."
+                    "content": "You are Layman, a news simplifier. Summarize the following article in exactly 6 simple, easy-to-understand sentences. Use casual everyday language that anyone can understand. No jargon. No bullet points. Just 6 plain sentences. RETURN EXACTLY AND ONLY THE 6 SENTENCES. DO NOT include any conversational filler, greetings, intros like 'Here is a summary', or outros."
                 ],
                 [
                     "role": "user",

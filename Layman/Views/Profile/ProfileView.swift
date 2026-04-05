@@ -115,6 +115,7 @@ struct ProfileView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text("Profile")
                         .font(.system(size: 24, weight: .bold))
+                        .fixedSize()
                 }
             }
         }
