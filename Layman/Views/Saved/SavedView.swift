@@ -18,6 +18,14 @@ struct SavedView: View {
                 Color(hex: "#FFF8F0").ignoresSafeArea()
                 
                 VStack {
+                    // Header
+                    Text("Saved")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(Color(hex: "#1A1A1A"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.top, -16) // Negative padding to bring it closer to the toolbar
+                    
                     // Search bar
                     if showSearch {
                         HStack {
@@ -37,7 +45,7 @@ struct SavedView: View {
                         .background(Color.white)
                         .cornerRadius(12)
                         .padding(.horizontal, 16)
-                        .padding(.top, 8)
+                        .padding(.top, 4)
                     }
                     
                     if savedViewModel.isLoading && savedViewModel.savedArticles.isEmpty {
@@ -90,20 +98,17 @@ struct SavedView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text("Saved")
-                        .font(.system(size: 24, weight: .bold))
-                        .fixedSize()
-                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         withAnimation { showSearch.toggle() }
                     } label: {
                         Image(systemName: showSearch ? "xmark" : "magnifyingglass")
-                            .foregroundColor(Color(hex: "#F97316"))
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(Color.black)
                     }
                 }
             }
+            .toolbarBackground(Color(hex: "#FFF8F0"), for: .navigationBar)
             .onAppear {
                 Task {
                     await savedViewModel.fetchSavedArticles()

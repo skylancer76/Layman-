@@ -20,6 +20,14 @@ struct ProfileView: View {
                 ScrollView {
                     VStack(spacing: 24) {
                         
+                        // Header
+                        Text("Profile")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(Color(hex: "#1A1A1A"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 8) 
+                        
                         // Avatar
                         VStack(spacing: 12) {
                             ZStack {
@@ -41,7 +49,7 @@ struct ProfileView: View {
                                 .font(.system(size: 16, weight: .medium))
                                 .foregroundColor(.primary)
                         }
-                        .padding(.top, 24)
+                        .padding(.top, 8)
                         
                         // Info Card
                         VStack(spacing: 0) {
@@ -111,13 +119,7 @@ struct ProfileView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text("Profile")
-                        .font(.system(size: 24, weight: .bold))
-                        .fixedSize()
-                }
-            }
+            .toolbarBackground(Color(hex: "#FFF8F0"), for: .navigationBar)
         }
     }
     

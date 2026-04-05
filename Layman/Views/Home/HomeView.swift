@@ -19,6 +19,13 @@ struct HomeView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
                         
+                        // Header
+                        Text("Layman")
+                            .font(.system(size: 28, weight: .heavy))
+                            .foregroundColor(Color(hex: "#1A1A1A"))
+                            .padding(.horizontal, 16)
+                            .padding(.top, -16)
+                        
                         // Search bar (when active)
                         if showSearch {
                             HStack {
@@ -99,12 +106,6 @@ struct HomeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text("Layman")
-                        .font(.system(size: 20, weight: .heavy))
-                        .foregroundColor(Color(hex: "#1A1A1A"))
-                        .fixedSize()
-                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         withAnimation { showSearch.toggle() }
@@ -115,6 +116,7 @@ struct HomeView: View {
                     }
                 }
             }
+            .toolbarBackground(Color(hex: "#FFF8F0"), for: .navigationBar)
         }
         .task {
             await articlesViewModel.fetchArticles()
