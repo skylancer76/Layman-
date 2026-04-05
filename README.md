@@ -6,7 +6,7 @@ Layman is a simplified news reader that covers business, tech, and startups. The
 > This project has been developed as part of the assignment for the recruitment process at **BrewApps**.
 
 <p align="center">
-  <video src="./Assets.xcassets/Github.Video.mov" width="300" controls></video>
+  <video src="./Layman/Assets.xcassets/Github%20Video.mov" width="300" controls></video>
 </p>
 
 ## Features
