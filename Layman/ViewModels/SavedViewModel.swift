@@ -14,6 +14,7 @@ class SavedViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var searchQuery = ""
+    @Published var needsRefresh = false
     
     var filteredArticles: [SavedArticle] {
         if searchQuery.isEmpty {
@@ -28,7 +29,10 @@ class SavedViewModel: ObservableObject {
         isLoading = true
         do {
             savedArticles = try await SupabaseService.shared.fetchSavedArticles()
+            print("[SavedViewModel] Fetched \(savedArticles.count) articles")
         } catch {
+            print("[SavedViewModel] Fetch error: \(error)")
+            print("[SavedViewModel] Error details: \(error.localizedDescription)")
             errorMessage = error.localizedDescription
         }
         isLoading = false
@@ -41,5 +45,9 @@ class SavedViewModel: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+    
+    func triggerRefresh() {
+        needsRefresh.toggle()
     }
 }

@@ -17,6 +17,7 @@ struct MainTabView: View {
             HomeView()
                 .environmentObject(articlesViewModel)
                 .environmentObject(authViewModel)
+                .environmentObject(savedViewModel)
                 .tabItem {
                     Label("Home", systemImage: "house.fill")
                 }

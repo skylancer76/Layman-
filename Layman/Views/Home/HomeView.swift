@@ -88,6 +88,9 @@ struct HomeView: View {
                     }
                     .padding(.bottom, 24)
                 }
+                .refreshable {
+                    await articlesViewModel.fetchArticles()
+                }
                 
                 if articlesViewModel.isLoading {
                     ProgressView()

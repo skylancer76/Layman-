@@ -10,6 +10,7 @@ import SwiftUI
 struct SavedView: View {
     @EnvironmentObject var savedViewModel: SavedViewModel
     @State private var showSearch = false
+    @State private var refreshId = 0
     
     var body: some View {
         NavigationStack {
@@ -39,44 +40,50 @@ struct SavedView: View {
                         .padding(.top, 8)
                     }
                     
-                    if savedViewModel.isLoading {
+                    if savedViewModel.isLoading && savedViewModel.savedArticles.isEmpty {
                         Spacer()
                         ProgressView()
                         Spacer()
-                    } else if savedViewModel.filteredArticles.isEmpty {
-                        Spacer()
-                        VStack(spacing: 16) {
-                            Image(systemName: "bookmark.slash")
-                                .font(.system(size: 48))
-                                .foregroundColor(Color(hex: "#F97316").opacity(0.4))
-                            Text(savedViewModel.searchQuery.isEmpty ? "No saved articles yet" : "No results found")
-                                .font(.system(size: 17, weight: .medium))
-                                .foregroundColor(.gray)
-                            if savedViewModel.searchQuery.isEmpty {
-                                Text("Bookmark articles to read them later")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.gray.opacity(0.7))
-                            }
-                        }
-                        Spacer()
                     } else {
                         ScrollView {
-                            VStack(spacing: 12) {
-                                ForEach(savedViewModel.filteredArticles) { saved in
-                                    SavedArticleRowView(
-                                        savedArticle: saved,
-                                        onUnsave: {
-                                            Task {
-                                                await savedViewModel.unsaveArticle(
-                                                    articleId: saved.articleId
-                                                )
-                                            }
-                                        }
-                                    )
-                                    .padding(.horizontal, 16)
+                            if savedViewModel.filteredArticles.isEmpty {
+                                VStack(spacing: 16) {
+                                    Spacer(minLength: 120)
+                                    Image(systemName: "bookmark.slash")
+                                        .font(.system(size: 48))
+                                        .foregroundColor(Color(hex: "#F97316").opacity(0.4))
+                                    Text(savedViewModel.searchQuery.isEmpty ? "No saved articles yet" : "No results found")
+                                        .font(.system(size: 17, weight: .medium))
+                                        .foregroundColor(.gray)
+                                    if savedViewModel.searchQuery.isEmpty {
+                                        Text("Bookmark articles to read them later")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(.gray.opacity(0.7))
+                                    }
+                                    Spacer(minLength: 120)
                                 }
+                                .frame(maxWidth: .infinity)
+                            } else {
+                                VStack(spacing: 12) {
+                                    ForEach(savedViewModel.filteredArticles) { saved in
+                                        SavedArticleRowView(
+                                            savedArticle: saved,
+                                            onUnsave: {
+                                                Task {
+                                                    await savedViewModel.unsaveArticle(
+                                                        articleId: saved.articleId
+                                                    )
+                                                }
+                                            }
+                                        )
+                                        .padding(.horizontal, 16)
+                                    }
+                                }
+                                .padding(.vertical, 12)
                             }
-                            .padding(.vertical, 12)
+                        }
+                        .refreshable {
+                            await savedViewModel.fetchSavedArticles()
                         }
                     }
                 }
@@ -98,6 +105,11 @@ struct SavedView: View {
                 }
             }
             .onAppear {
+                Task {
+                    await savedViewModel.fetchSavedArticles()
+                }
+            }
+            .onChange(of: savedViewModel.needsRefresh) { _ in
                 Task {
                     await savedViewModel.fetchSavedArticles()
                 }

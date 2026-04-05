@@ -16,6 +16,7 @@ struct ArticleDetailView: View {
     @State private var contentCards: [String] = []
     @State private var isLoadingContent = true
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var savedViewModel: SavedViewModel
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -197,7 +198,16 @@ struct ArticleDetailView: View {
     func loadContent() async {
         isLoadingContent = true
         
-        async let savedCheck: Bool = (try? SupabaseService.shared.isArticleSaved(articleId: article.id)) ?? false
+        async let savedCheck: Bool = {
+            do {
+                let saved = try await SupabaseService.shared.isArticleSaved(articleId: article.id)
+                print("[ArticleDetail] isArticleSaved check: \(saved)")
+                return saved
+            } catch {
+                print("[ArticleDetail] isArticleSaved error: \(error)")
+                return false
+            }
+        }()
         
         let articleContext = "\(article.title). \(article.description ?? "")"
         
@@ -265,27 +275,29 @@ struct ArticleDetailView: View {
         return cards
     }
     
+    @MainActor
     func toggleSave() async {
         let previousState = isSaved
         
         // Optimistic UI update
-        // We do this immediately so the bookmark icon turns filled instantly
-        withAnimation {
-            isSaved.toggle()
-        }
+        isSaved.toggle()
         
         do {
             if previousState {
+                print("[ArticleDetail] Unsaving article: \(article.id)")
                 try await SupabaseService.shared.unsaveArticle(articleId: article.id)
             } else {
+                print("[ArticleDetail] Saving article: \(article.id)")
                 try await SupabaseService.shared.saveArticle(article)
             }
+            print("[ArticleDetail] Save/unsave succeeded. isSaved = \(isSaved)")
+            // Notify SavedViewModel to refresh its list
+            savedViewModel.triggerRefresh()
         } catch {
-            print("Save error: \(error)")
-            // Revert if network call or constraints fail
-            withAnimation {
-                isSaved = previousState
-            }
+            print("[ArticleDetail] Save error: \(error)")
+            print("[ArticleDetail] Error details: \(error.localizedDescription)")
+            // Revert on failure
+            isSaved = previousState
         }
     }
     
