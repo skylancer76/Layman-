@@ -28,6 +28,20 @@ struct WelcomeView: View {
                 )
                 .ignoresSafeArea()
                 
+                ZStack {
+                    Circle()
+                        .fill(Color(hex: "#F97316").opacity(0.3))
+                        .frame(width: 300, height: 300)
+                        .blur(radius: 60)
+                        .offset(x: -90, y: -300)
+                    
+                    Circle()
+                        .fill(Color(hex: "#C4652A").opacity(0.3))
+                        .frame(width: 200, height: 200)
+                        .blur(radius: 40)
+                        .offset(x: 90, y: 300)
+                }
+                
                 VStack(spacing: 0) {
                     Spacer()
                         .frame(height: 40)
